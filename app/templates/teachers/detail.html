@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Détails enseignant{% endblock %}
+{% block content %}
+<style>
+    /* Styles complémentaires */
+    .glass-detail {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    .glass-detail:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(4px);
+        border-radius: 1.2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.2s;
+    }
+    .stat-card:hover {
+        background: white;
+        transform: translateY(-2px);
+    }
+    .table-container {
+        border-radius: 1rem;
+        overflow-x: auto;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(4px);
+    }
+    .table-container table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .table-container th {
+        background: rgba(79, 70, 229, 0.1);
+        padding: 12px 16px;
+        font-weight: 600;
+        color: #1f2937;
+        border-bottom: 1px solid rgba(203, 213, 225, 0.5);
+    }
+    .table-container td {
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(203, 213, 225, 0.3);
+        color: #374151;
+    }
+    .table-container tr:hover td {
+        background: rgba(255, 255, 255, 0.6);
+    }
+    .badge-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .badge-active {
+        background: #dcfce7;
+        color: #166534;
+    }
+    .badge-canceled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    .btn-edit {
+        background: linear-gradient(105deg, #2563eb 0%, #3b82f6 100%);
+        transition: all 0.2s;
+    }
+    .btn-edit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px -4px rgba(37, 99, 235, 0.4);
+    }
+    .btn-back {
+        background: rgba(156, 163, 175, 0.6);
+        backdrop-filter: blur(4px);
+        transition: all 0.2s;
+    }
+    .btn-back:hover {
+        background: rgba(107, 114, 128, 0.8);
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="max-w-6xl mx-auto my-8">
+    <div class="glass-detail">
+        <!-- En-tête -->
+        <div class="bg-gradient-to-r from-indigo-600/80 to-indigo-800/80 backdrop-blur-sm px-6 py-5">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/20 p-3 rounded-2xl">
+                    <i class="fas fa-chalkboard-user text-white text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Profil de {{ teacher.name }}</h2>
+                    <p class="text-indigo-200 text-sm">Détails et statistiques de l'enseignant</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Corps -->
+        <div class="p-6">
+            <!-- Cartes stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+                <div class="stat-card p-4 flex items-start gap-3">
+                    <div class="bg-indigo-100 p-2 rounded-xl">
+                        <i class="fas fa-envelope text-indigo-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Email</h3>
+                        <p class="text-gray-800 font-medium break-all">{{ teacher.email }}</p>
+                    </div>
+                </div>
+                <div class="stat-card p-4 flex items-start gap-3">
+                    <div class="bg-purple-100 p-2 rounded-xl">
+                        <i class="fas fa-tags text-purple-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Spécialités</h3>
+                        <p class="text-gray-800 font-medium">{{ teacher.specialities | join(', ') }}</p>
+                    </div>
+                </div>
+                <div class="stat-card p-4 flex items-start gap-3">
+                    <div class="bg-emerald-100 p-2 rounded-xl">
+                        <i class="fas fa-chart-line text-emerald-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Statistiques</h3>
+                        <p class="text-gray-800 font-medium">Cours : {{ courses|length }}</p>
+                        <p class="text-gray-800 font-medium">Classes : {{ class_count }}</p>
+                        <p class="text-gray-800 font-medium">Étudiants : {{ student_count }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liste des cours -->
+            <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-book-open text-indigo-500"></i> Cours enseignés
+            </h3>
+
+            {% if courses %}
+            <div class="table-container mb-6">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="text-left">Titre</th>
+                            <th class="text-left">Classe</th>
+                            <th class="text-left">Date</th>
+                            <th class="text-left">Mode</th>
+                            <th class="text-left">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in courses %}
+                        <tr class="hover:bg-white/30 transition">
+                            <td class="font-medium">{{ c.title }}</td>
+                            <td>{{ c.class_name }}</td>
+                            <td>{{ c.start_datetime.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>
+                                <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                                    {{ c.mode }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if c.is_canceled %}
+                                    <span class="badge-status badge-canceled">Annulé</span>
+                                {% else %}
+                                    <span class="badge-status badge-active">Actif</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="bg-white/50 rounded-xl p-8 text-center text-gray-500 mb-6">
+                <i class="fas fa-chalkboard text-3xl text-gray-300 mb-2"></i>
+                <p>Aucun cours assigné à cet enseignant.</p>
+            </div>
+            {% endif %}
+
+            <!-- Boutons d'action -->
+            <div class="flex gap-3">
+                {% if session.user_role == 'admin' %}
+                <a href="{{ url_for('teachers.edit', id=teacher.id) }}" 
+                   class="btn-edit text-white px-5 py-2 rounded-xl font-semibold shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+                {% endif %}
+                <a href="{{ url_for('teachers.list') }}" 
+                   class="btn-back text-gray-700 px-5 py-2 rounded-xl font-medium transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

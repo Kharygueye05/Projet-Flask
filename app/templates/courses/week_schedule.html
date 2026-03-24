@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Planning hebdomadaire{% endblock %}
+{% block content %}
+<style>
+    .glass-card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    .glass-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+    .table-container {
+        overflow-x: auto;
+        border-radius: 1.5rem;
+    }
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .modern-table th {
+        background: #f9fafb;
+        padding: 1rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #4b5563;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+    }
+    .modern-table td {
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid #f0f2f5;
+        color: #1f2937;
+        transition: background 0.2s;
+        vertical-align: top;
+    }
+    .modern-table tr:hover td {
+        background: #fef9ff;
+    }
+    .course-block {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(4px);
+        border-radius: 1rem;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s;
+    }
+    .course-block:hover {
+        background: white;
+        transform: translateX(4px);
+    }
+    .badge-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+    .badge-canceled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    .btn-nav {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        transition: all 0.2s;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-weight: 500;
+    }
+    .btn-nav:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto my-8">
+    <div class="glass-card">
+        <!-- En-tête avec navigation -->
+        <div class="bg-gradient-to-r from-indigo-600/80 to-indigo-800/80 backdrop-blur-sm px-6 py-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-xl">
+                        <i class="fas fa-calendar-week text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">
+                            {% if page_title == 'Planning du' %}
+                                Planning du {{ start_of_week.strftime('%d/%m/%Y') }} au {{ (start_of_week + timedelta(days=6)).strftime('%d/%m/%Y') }}
+                            {% else %}
+                                {{ page_title }} ({{ start_of_week.strftime('%d/%m/%Y') }} - {{ (start_of_week + timedelta(days=6)).strftime('%d/%m/%Y') }})
+                            {% endif %}
+                        </h2>
+                        <p class="text-indigo-200 text-sm mt-1">Vue hebdomadaire des cours</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <a href="{{ url_for('courses.week_schedule', date=prev_week.strftime('%Y-%m-%d')) }}" 
+                       class="btn-nav inline-flex items-center gap-1">
+                        <i class="fas fa-chevron-left text-xs"></i> Semaine précédente
+                    </a>
+                    <a href="{{ url_for('courses.week_schedule', date=next_week.strftime('%Y-%m-%d')) }}" 
+                       class="btn-nav inline-flex items-center gap-1">
+                        Semaine suivante <i class="fas fa-chevron-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau du planning -->
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th class="w-1/4">Jour</th>
+                        <th>Cours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in week_days %}
+                    <tr>
+                        <td class="font-semibold text-gray-800 align-top">
+                            {{ day.date.strftime('%A %d/%m') }}
+                        </td>
+                        <td>
+                            {% if day.courses %}
+                                {% for course in day.courses %}
+                                <div class="course-block {% if course.is_canceled %}border-l-4 border-red-500{% else %}border-l-4 border-indigo-500{% endif %}">
+                                    <div class="flex flex-wrap justify-between items-start gap-2">
+                                        <strong class="text-gray-800">{{ course.title }}</strong>
+                                        {% if course.is_canceled %}
+                                            <span class="badge-status badge-canceled">Annulé</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-sm text-gray-600 mt-1 space-y-1">
+                                        <div>
+                                            <i class="fas fa-clock w-5 text-indigo-400"></i>
+                                            {{ course.start_datetime.strftime('%H:%M') }} - {{ (course.start_datetime + timedelta(minutes=course.duration)).strftime('%H:%M') }}
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-chalkboard-user w-5 text-indigo-400"></i>
+                                            Prof : {{ course.teacher_name }} | Classe : {{ course.class_name }}
+                                        </div>
+                                        <div>
+                                            {% if course.mode == 'Présentiel' %}
+                                                <i class="fas fa-door-open w-5 text-indigo-400"></i>
+                                                Salle : {{ course.room_name or 'Non définie' }}
+                                            {% else %}
+                                                <i class="fas fa-globe w-5 text-indigo-400"></i>
+                                                Distanciel
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-gray-400 italic">Aucun cours</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

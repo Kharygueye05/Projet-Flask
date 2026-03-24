@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord - Administrateur{% endblock %}
+{% block content %}
+<style>
+    /* Glassmorphism et effets modernes */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+    .stat-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(8px);
+        border-radius: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        transition: all 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        background: white;
+        border-color: #c7d2fe;
+    }
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+    }
+    .year-block {
+        background: rgba(248, 250, 252, 0.8);
+        backdrop-filter: blur(4px);
+        border-radius: 1.2rem;
+        padding: 0.7rem;
+        text-align: center;
+        transition: 0.2s;
+        border: 1px solid rgba(203, 213, 225, 0.4);
+    }
+    .year-block:hover {
+        background: white;
+        transform: scale(1.02);
+    }
+    .event-item {
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(4px);
+        border-left: 4px solid #6366f1;
+        border-radius: 1rem;
+        transition: 0.2s;
+    }
+    .event-item:hover {
+        background: white;
+        transform: translateX(5px);
+    }
+    .progress-bar-bg {
+        background: #eef2ff;
+        border-radius: 20px;
+        height: 6px;
+        overflow: hidden;
+    }
+    .progress-fill {
+        background: linear-gradient(90deg, #6366f1, #a855f7);
+        border-radius: 20px;
+        height: 100%;
+        width: 0%;
+        transition: width 0.6s ease;
+    }
+    .btn-ghost {
+        background: rgba(79, 70, 229, 0.1);
+        transition: 0.2s;
+    }
+    .btn-ghost:hover {
+        background: #4f46e5;
+        color: white;
+    }
+</style>
+
+<!-- 4 cartes stats (données intactes) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="stat-card p-6 flex justify-between items-center">
+        <div><p class="text-indigo-500 font-semibold text-sm">Étudiants</p><p class="text-3xl font-bold text-gray-800">{{ total_students }}</p></div>
+        <div class="bg-indigo-100 p-3 rounded-full"><i class="fas fa-user-graduate text-indigo-600 text-xl"></i></div>
+    </div>
+    <div class="stat-card p-6 flex justify-between items-center">
+        <div><p class="text-emerald-500 font-semibold text-sm">Enseignants</p><p class="text-3xl font-bold text-gray-800">{{ total_teachers }}</p></div>
+        <div class="bg-emerald-100 p-3 rounded-full"><i class="fas fa-chalkboard-user text-emerald-600 text-xl"></i></div>
+    </div>
+    <div class="stat-card p-6 flex justify-between items-center">
+        <div><p class="text-sky-500 font-semibold text-sm">Classes</p><p class="text-3xl font-bold text-gray-800">{{ total_classes }}</p></div>
+        <div class="bg-sky-100 p-3 rounded-full"><i class="fas fa-users text-sky-600 text-xl"></i></div>
+    </div>
+    <div class="stat-card p-6 flex justify-between items-center">
+        <div><p class="text-fuchsia-500 font-semibold text-sm">Cours</p><p class="text-3xl font-bold text-gray-800">{{ total_courses }}</p></div>
+        <div class="bg-fuchsia-100 p-3 rounded-full"><i class="fas fa-book text-fuchsia-600 text-xl"></i></div>
+    </div>
+</div>
+
+<!-- Première rangée : Effectifs par classe (original) + Calendar Attendance (inspiré) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Effectifs par classe (inchangé) -->
+    <div class="glass-card p-6">
+        <h3 class="text-lg font-bold mb-4"><i class="fas fa-chart-bar text-indigo-500 mr-2"></i> Effectifs par classe</h3>
+        <div class="space-y-3">
+            {% for cls in class_stats %}
+            <div class="flex justify-between items-center border-b border-gray-200/50 pb-2">
+                <span>{{ cls.name }}</span>
+                <div class="flex items-center space-x-2">
+                    <span class="text-gray-600">{{ cls.students_count }} étudiants</span>
+                    <span class="text-gray-600">• {{ cls.courses_count }} cours</span>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-gray-500">Aucune classe</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Calendar Attendance (inspiré image) -->
+    <div class="glass-card p-6">
+        <div class="flex justify-between items-center mb-5">
+            <h3 class="text-lg font-bold"><i class="fas fa-calendar-check text-indigo-500 mr-2"></i> Calendar Attendance</h3>
+            <span class="bg-indigo-100 text-indigo-700 text-xs px-3 py-1 rounded-full">Présences</span>
+        </div>
+        <div class="calendar-grid">
+            <div class="year-block"><span class="font-bold">2019</span><br>Jan • Avr • Juil</div>
+            <div class="year-block"><span class="font-bold">2020</span><br>Fév • Mai • Août</div>
+            <div class="year-block"><span class="font-bold">2021</span><br>Mar • Juin • Sep</div>
+            <div class="year-block"><span class="font-bold">2022</span><br>Oct • Nov</div>
+        </div>
+        <div class="mt-5 text-sm text-gray-500 flex justify-between border-t pt-3">
+            <span><i class="fas fa-chart-line text-indigo-400"></i> Taux moyen 94%</span>
+            <a href="#" class="text-indigo-500 hover:underline">Détails →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Deuxième rangée : Dernières activités (original) + Bar Chart & Events (inspiré) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Dernières activités (inchangé) -->
+    <div class="glass-card p-6">
+        <h3 class="text-lg font-bold mb-4"><i class="fas fa-clock text-indigo-500 mr-2"></i> Dernières activités</h3>
+        <div class="space-y-4">
+            <div>
+                <p class="font-semibold text-gray-700">Derniers étudiants</p>
+                <ul class="mt-2 divide-y divide-gray-200/50">
+                    {% for s in latest_students %}
+                    <li class="py-2 flex items-center"><i class="fas fa-user-graduate text-gray-400 mr-2"></i> {{ s.name }}</li>
+                    {% else %}
+                    <li class="py-2 text-gray-500">Aucun</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <p class="font-semibold text-gray-700">Derniers cours créés</p>
+                <ul class="mt-2 divide-y divide-gray-200/50">
+                    {% for c in latest_courses %}
+                    <li class="py-2"><i class="fas fa-book text-gray-400 mr-2"></i> {{ c.title }} ({{ c.teacher_name }}) - Classe {{ c.class_name }}</li>
+                    {% else %}
+                    <li class="py-2 text-gray-500">Aucun</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bar Chart & Events (inspiré image) -->
+    <div class="glass-card p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold"><i class="fas fa-chart-column text-indigo-500 mr-2"></i> School Year 2024 - 2025</h3>
+            <span class="text-xs bg-gray-200/70 px-2 py-1 rounded-full">données en milliers</span>
+        </div>
+        <div class="space-y-4">
+            {% set sorted_classes = class_stats|sort(attribute='students_count', reverse=True) %}
+            {% for cls in sorted_classes[:3] %}
+            <div>
+                <div class="flex justify-between text-sm font-medium"><span>{{ cls.name }}</span><span class="text-indigo-700">{{ cls.students_count }} élèves</span></div>
+                <div class="progress-bar-bg mt-1">
+                    {% set max_val = sorted_classes[0].students_count if sorted_classes else 1 %}
+                    <div class="progress-fill" style="width: {{ (cls.students_count / max_val * 100) if max_val else 0 }}%;"></div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-gray-400">Aucune donnée</p>
+            {% endfor %}
+        </div>
+
+        <!-- Activités & Événements (inspiré image) -->
+        <div class="mt-6 pt-4 border-t border-gray-200/50">
+            <h4 class="font-semibold flex items-center gap-2 mb-3"><i class="fas fa-calendar-star text-indigo-500"></i></h4>
+            <div class="space-y-2">,
+                <div class="event-item p-2 flex items-center gap-3"><i class="fas fa-gamepad text-indigo-500"></i> Semaine Entrepreunariale</div>
+                <div class="event-item p-2 flex items-center gap-3"><i class="fas fa-graduation-cap text-emerald-500"></i> Journée Humanitaire</div>
+                <div class="event-item p-2 flex items-center gap-3"><i class="fas fa-running text-amber-500"></i> Journée Sport</div>
+            </div>
+        </div>
+
+        <!-- Teacher badges (inspiré image) -->
+        <div class="mt-6 grid grid-cols-3 gap-2 text-center">
+            <div class="bg-white/50 rounded-xl p-2"><p class="font-bold text-indigo-600">99.88%</p><p class="text-xs">Rovan Hossam</p></div>
+            <div class="bg-white/50 rounded-xl p-2"><p class="font-bold text-indigo-600">98.17%</p><p class="text-xs">Rony Beyablo</p></div>
+            <div class="bg-white/50 rounded-xl p-2"><p class="font-bold text-indigo-600">97.32%</p><p class="text-xs">Adam Hisham</p></div>
+        </div>
+        <div class="mt-4 text-right">
+            <button class="text-indigo-500 text-sm font-medium hover:underline">View All →</button>
+        </div>
+    </div>
+</div>
+
+<!-- Dernière ligne : petites cartes stats supplémentaires (optionnel) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="glass-card p-5 flex items-center gap-3">
+        <div class="bg-indigo-100 p-2 rounded-full"><i class="fas fa-chart-pie text-indigo-600"></i></div>
+        <div><p class="text-xs text-gray-500">Taux d'occupation</p><p class="text-xl font-bold">{{ ((total_students / (total_classes * 30)) * 100)|round(1) if total_classes else 0 }}%</p></div>
+    </div>
+    <div class="glass-card p-5 flex items-center gap-3">
+        <div class="bg-emerald-100 p-2 rounded-full"><i class="fas fa-chart-line text-emerald-600"></i></div>
+        <div><p class="text-xs text-gray-500">Engagement global</p><p class="text-xl font-bold">94%</p></div>
+    </div>
+    <div class="glass-card p-5 flex items-center gap-3">
+        <div class="bg-amber-100 p-2 rounded-full"><i class="fas fa-trophy text-amber-600"></i></div>
+        <div><p class="text-xs text-gray-500">Projet phare</p><p class="text-sm font-bold">Innovation Lab</p></div>
+    </div>
+</div>
+
+<div class="text-center text-xs text-gray-400 mt-8 pt-4 border-t">
+    <i class="fas fa-database mr-1"></i> Données mises à jour : {{ total_students }} étudiants • {{ total_courses }} cours
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% macro render_filter(action, search_matricule="", search_email="") %}
+<form method="GET" action="{{ action }}" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+    <!-- Champ matricule -->
+    <div class="flex-1 relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-id-card text-indigo-400 text-sm"></i>
+        </div>
+        <input type="text" name="search_matricule"
+               placeholder="Filtrer par matricule" value="{{ search_matricule }}"
+               class="w-full pl-9 pr-3 py-2 bg-white/60 backdrop-blur-sm border border-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition text-sm">
+    </div>
+
+    <!-- Champ email -->
+    <div class="flex-1 relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fas fa-envelope text-indigo-400 text-sm"></i>
+        </div>
+        <input type="text" name="search_email"
+               placeholder="Filtrer par email" value="{{ search_email }}"
+               class="w-full pl-9 pr-3 py-2 bg-white/60 backdrop-blur-sm border border-white/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition text-sm">
+    </div>
+
+    <!-- Bouton Rechercher -->
+    <button type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white px-5 py-2 rounded-xl hover:from-indigo-700 hover:to-indigo-800 transition shadow-md text-sm font-medium whitespace-nowrap">
+        <i class="fas fa-search mr-1"></i> Rechercher
+    </button>
+
+    <!-- Bouton Réinitialiser -->
+    <a href="{{ action }}"
+       class="bg-white/40 backdrop-blur-sm text-gray-700 px-5 py-2 rounded-xl hover:bg-white/60 transition text-sm font-medium whitespace-nowrap border border-white/30">
+        <i class="fas fa-undo-alt mr-1"></i> Réinitialiser
+    </a>
+</form>
+{% endmacro %}

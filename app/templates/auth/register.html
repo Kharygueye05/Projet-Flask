@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<style>
+    .glass-auth {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+    }
+    .glass-auth:hover {
+        transform: translateY(-4px);
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.1);
+    }
+    .input-icon {
+        transition: all 0.2s;
+        border: 1px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 0.75rem;
+    }
+    .input-icon:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        outline: none;
+        background: white;
+    }
+    .btn-register {
+        background: linear-gradient(105deg, #10b981 0%, #059669 100%);
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px -4px rgba(16, 185, 129, 0.3);
+    }
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px -6px rgba(16, 185, 129, 0.4);
+    }
+</style>
+
+<div class="flex justify-center items-center min-h-[80vh]">
+    <div class="glass-auth p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl mb-4 shadow-sm">
+                <i class="fas fa-user-plus text-3xl text-green-600"></i>
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">Inscription</h2>
+            <p class="text-gray-500 mt-2">Créez votre compte</p>
+        </div>
+        <form method="POST">
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Nom complet</label>
+                <div class="relative">
+                    <i class="fas fa-user absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" name="name" required
+                           class="w-full pl-10 pr-3 py-2 input-icon focus:ring-2 focus:ring-indigo-400">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-3 top-3 text-gray-400"></i>
+                    <input type="email" name="email" required
+                           class="w-full pl-10 pr-3 py-2 input-icon focus:ring-2 focus:ring-indigo-400">
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Mot de passe</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-3 text-gray-400"></i>
+                    <input type="password" name="password" required
+                           class="w-full pl-10 pr-3 py-2 input-icon focus:ring-2 focus:ring-indigo-400">
+                </div>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-3 text-gray-400"></i>
+                    <input type="password" name="confirm_password" required
+                           class="w-full pl-10 pr-3 py-2 input-icon focus:ring-2 focus:ring-indigo-400">
+                </div>
+            </div>
+            <button type="submit" class="btn-register w-full text-white py-2 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle"></i> S'inscrire
+            </button>
+        </form>
+        <div class="text-center mt-6">
+            <p class="text-gray-600">Déjà inscrit ? 
+                <a href="{{ url_for('auth.login') }}" class="text-indigo-600 font-semibold hover:underline">Connectez-vous</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

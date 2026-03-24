@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Enseignants{% endblock %}
+{% block content %}
+<style>
+    /* Styles modernes */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    .table-container {
+        overflow-x: auto;
+        border-radius: 1.5rem;
+    }
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .modern-table th {
+        background: #f9fafb;
+        padding: 1rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #4b5563;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+    }
+    .modern-table td {
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid #f0f2f5;
+        color: #1f2937;
+        transition: background 0.2s;
+    }
+    .modern-table tr:hover td {
+        background: #fef9ff;
+    }
+    .speciality-badge {
+        display: inline-block;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+    }
+    .action-icons a {
+        margin: 0 0.5rem;
+        font-size: 1.1rem;
+        transition: all 0.2s;
+        display: inline-block;
+    }
+    .action-icons a:hover {
+        transform: scale(1.1);
+    }
+    .filter-bar {
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(4px);
+        border-radius: 1.2rem;
+        padding: 0.5rem;
+    }
+    .search-input {
+        background: white;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+    }
+    .search-input:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        outline: none;
+    }
+    .btn-primary {
+        background: linear-gradient(105deg, #4f46e5 0%, #7c3aed 100%);
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px -4px rgba(79, 70, 229, 0.3);
+    }
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px -6px rgba(79, 70, 229, 0.4);
+    }
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+<div class="max-w-7xl mx-auto my-8">
+    <div class="glass-card">
+        <!-- En-tête -->
+        <div class="bg-gradient-to-r from-indigo-600/80 to-indigo-800/80 backdrop-blur-sm px-6 py-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-xl">
+                        <i class="fas fa-chalkboard-user text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Enseignants</h2>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{{ url_for('teachers.create') }}" 
+                       class="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl transition">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </a>
+                    <form action="{{ url_for('teachers.search') }}" method="GET" class="flex">
+                        <input type="text" name="q" placeholder="Rechercher..." 
+                               class="search-input rounded-l-xl px-4 py-2 focus:outline-none">
+                        <button type="submit" 
+                                class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-r-xl transition">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de filtre -->
+        <div class="px-6 py-3 border-b border-gray-100 flex items-center gap-3 flex-wrap">
+            <i class="fas fa-filter text-gray-400"></i>
+            <form method="GET" action="{{ url_for('teachers.list') }}" class="flex items-center gap-2">
+                <select name="speciality" 
+                        class="bg-white border border-gray-200 rounded-xl px-3 py-1.5 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-transparent">
+                    <option value="">Toutes les spécialités</option>
+                    {% for spec in all_specialities %}
+                    <option value="{{ spec }}" {% if speciality == spec %}selected{% endif %}>{{ spec }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" 
+                        class="bg-indigo-50 text-indigo-700 px-4 py-1.5 rounded-xl hover:bg-indigo-100 transition text-sm">
+                    Filtrer
+                </button>
+            </form>
+        </div>
+
+        <!-- Tableau des enseignants -->
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Spécialité</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td class="font-mono text-gray-500">#{{ teacher.id }}</td>
+                        <td class="font-medium">{{ teacher.name }}</td>
+                        <td class="text-gray-600">{{ teacher.email }}</td>
+                        <td>
+                            {% if teacher.speciality %}
+                                <span class="speciality-badge">{{ teacher.speciality }}</span>
+                            {% elif teacher.specialities %}
+                                {% for spec in teacher.specialities %}
+                                <span class="speciality-badge">{{ spec }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-gray-400 text-sm">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center action-icons">
+                            <a href="{{ url_for('teachers.detail', id=teacher.id) }}" 
+                               class="text-purple-500 hover:text-purple-700" title="Profil">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <a href="{{ url_for('teachers.edit', id=teacher.id) }}" 
+                               class="text-indigo-500 hover:text-indigo-700" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ url_for('teachers.delete', id=teacher.id) }}" 
+                               class="text-red-500 hover:text-red-700" title="Supprimer"
+                               onclick="return confirm('Supprimer cet enseignant ?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-400">
+                            <i class="fas fa-chalkboard-user text-3xl mb-2 block"></i>
+                            Aucun enseignant trouvé.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pied de page optionnel -->
+        {% if teachers|length > 0 %}
+        <div class="px-6 py-3 border-t border-gray-100 text-sm text-gray-500 flex justify-between items-center">
+            <span>{{ teachers|length }} enseignant(s)</span>
+            <span class="text-indigo-500">Page 1 / 1</span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

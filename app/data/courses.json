@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "Business English",
+    "teacher_id": 1,
+    "class_id": 1,
+    "start_datetime": "2026-03-24T08:00:00",
+    "duration": 120,
+    "mode": "Distanciel",
+    "room_id": null,
+    "is_canceled": false
+  },
+  {
+    "id": 2,
+    "title": "Management de processus",
+    "teacher_id": 1,
+    "class_id": 2,
+    "start_datetime": "2026-03-25T16:00:00",
+    "duration": 120,
+    "mode": "Présentiel",
+    "room_id": 2,
+    "is_canceled": true
+  },
+  {
+    "id": 3,
+    "title": "Flask",
+    "teacher_id": 3,
+    "class_id": 1,
+    "start_datetime": "2026-03-24T10:00:00",
+    "duration": 240,
+    "mode": "Présentiel",
+    "room_id": 3,
+    "is_canceled": false
+  },
+  {
+    "id": 5,
+    "title": "Python",
+    "teacher_id": 3,
+    "class_id": 3,
+    "start_datetime": "2026-03-27T12:00:00",
+    "duration": 240,
+    "mode": "Présentiel",
+    "room_id": 2,
+    "is_canceled": false
+  },
+  {
+    "id": 6,
+    "title": "Cisco",
+    "teacher_id": 2,
+    "class_id": 1,
+    "start_datetime": "2026-03-27T08:00:00",
+    "duration": 120,
+    "mode": "Distanciel",
+    "room_id": null,
+    "is_canceled": false
+  }
+]

@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "name": "L3_GLRS",
+    "description": "",
+    "student_ids": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    "id": 2,
+    "name": "L3_CPD",
+    "description": "",
+    "student_ids": [
+      8,
+      7
+    ]
+  },
+  {
+    "id": 3,
+    "name": "L3-ETSE",
+    "description": "",
+    "student_ids": [
+      5,
+      6
+    ]
+  },
+  {
+    "id": 4,
+    "name": "L3-IAGE",
+    "description": "",
+    "student_ids": []
+  },
+  {
+    "id": 5,
+    "name": "L3-TTL",
+    "description": "",
+    "student_ids": []
+  },
+  {
+    "id": 6,
+    "name": "L3-Cybersécurité",
+    "description": "",
+    "student_ids": []
+  }
+]

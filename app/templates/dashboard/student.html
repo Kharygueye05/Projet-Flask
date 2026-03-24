@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Tableau de bord - Étudiant{% endblock %}
+{% block content %}
+<style>
+    .welcome-card {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    }
+    .stat-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+        transition: all 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.05);
+    }
+    .course-card {
+        background: white;
+        border-radius: 1.2rem;
+        border: 1px solid #f0f2f5;
+        transition: all 0.2s;
+    }
+    .course-card:hover {
+        border-color: #e0e7ff;
+        box-shadow: 0 8px 12px -6px rgba(0,0,0,0.05);
+        transform: translateY(-2px);
+    }
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 2rem;
+        font-weight: 600;
+    }
+    .badge-active {
+        background: #e6f7e6;
+        color: #0a5c0a;
+    }
+    .badge-canceled {
+        background: #ffe6e6;
+        color: #b91c1c;
+    }
+</style>
+
+<div class="max-w-7xl mx-auto">
+    <!-- En-tête de bienvenue -->
+    <div class="welcome-card rounded-2xl text-white p-6 md:p-8 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">Bonjour, {{ student.name if student else session.user_name }} 👋</h1>
+                <p class="text-indigo-100 mt-1">
+                    <i class="fas fa-id-card mr-1"></i> {{ student.matricule if student else '' }}
+                    &nbsp;|&nbsp;
+                    <i class="fas fa-users mr-1"></i> {{ class_name }}
+                </p>
+                <p class="text-indigo-100 text-sm mt-1">{{ student.email if student else '' }}</p>
+            </div>
+            <div class="bg-white/10 rounded-2xl p-4 backdrop-blur-sm text-center">
+                <p class="text-sm text-indigo-100">Moyenne du trimestre</p>
+                <p class="text-3xl font-bold">14.5</p>
+                <p class="text-xs text-indigo-200">+0.8 vs trimestre dernier</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cartes statistiques -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+        <div class="stat-card p-5 flex items-center gap-4">
+            <div class="bg-indigo-50 p-3 rounded-xl">
+                <i class="fas fa-book-open text-indigo-600 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total cours</p>
+                <p class="text-2xl font-bold text-gray-800">{{ courses|length }}</p>
+            </div>
+        </div>
+        <div class="stat-card p-5 flex items-center gap-4">
+            <div class="bg-green-50 p-3 rounded-xl">
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Cours actifs</p>
+                <p class="text-2xl font-bold text-gray-800">
+                    {{ courses | selectattr('is_canceled', 'equalto', false) | list | length }}
+                </p>
+            </div>
+        </div>
+        <div class="stat-card p-5 flex items-center gap-4">
+            <div class="bg-amber-50 p-3 rounded-xl">
+                <i class="fas fa-clock text-amber-600 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Heures cette semaine</p>
+                <p class="text-2xl font-bold text-gray-800">12h</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des séances -->
+    <div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">📚 Mes séances</h2>
+            <a href="{{ url_for('courses.schedule') }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1">
+                Voir l'emploi du temps <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+
+        {% if sessions %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {% for session in sessions %}
+            <div class="course-card p-5">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-bold text-gray-800 text-lg">{{ session.title }}</h3>
+                    {% if session.is_canceled %}
+                        <span class="badge badge-canceled">Annulé</span>
+                    {% else %}
+                        <span class="badge badge-active">Actif</span>
+                    {% endif %}
+                </div>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <p><i class="fas fa-users w-5 text-indigo-400"></i> Classe : {{ session.class_name }}</p>
+                    <p><i class="fas fa-calendar-day w-5 text-indigo-400"></i> {{ session.schedule.day }} - {{ session.schedule.time }}</p>
+                    <p><i class="fas fa-door-open w-5 text-indigo-400"></i> {{ session.room_name or 'En ligne' }} ({{ session.mode }})</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="bg-gray-50 rounded-2xl p-8 text-center text-gray-500">
+            <i class="fas fa-calendar-times text-4xl text-gray-300 mb-2"></i>
+            <p>Aucune séance assignée à ta classe pour le moment.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="mt-8 bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+        <h2 class="font-semibold text-gray-800 mb-3">Actions rapides</h2>
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ url_for('courses.schedule') }}" class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 px-4 py-2 rounded-xl hover:bg-indigo-100 transition">
+                <i class="fas fa-calendar-alt"></i> Mon emploi du temps
+            </a>
+            <a href="{{ url_for('auth.profile') }}" class="inline-flex items-center gap-2 bg-gray-50 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-100 transition">
+                <i class="fas fa-id-card"></i> Mon profil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

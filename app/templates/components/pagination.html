@@ -1,0 +1,30 @@
+{% macro render_pagination(page, total_pages, endpoint, extra_params={}) %}
+{% if total_pages > 1 %}
+<div class="flex flex-wrap justify-center gap-1">
+    <!-- Lien Précédent -->
+    <a href="{{ url_for(endpoint, page=page-1, **extra_params) }}"
+       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl backdrop-blur-sm transition {% if page == 1 %}opacity-40 pointer-events-none bg-white/30 text-gray-500{% else %}bg-white/60 hover:bg-white/80 text-indigo-600 hover:text-indigo-700 border border-white/50{% endif %}">
+        <i class="fas fa-chevron-left text-xs"></i> Précédent
+    </a>
+
+    <!-- Numéros de page -->
+    {% for p in range(1, total_pages + 1) %}
+    <a href="{{ url_for(endpoint, page=p, **extra_params) }}"
+       class="px-3 py-1.5 rounded-xl transition backdrop-blur-sm border border-white/50
+              {% if p == page %}
+                bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md
+              {% else %}
+                bg-white/60 text-indigo-600 hover:bg-white/80
+              {% endif %}">
+        {{ p }}
+    </a>
+    {% endfor %}
+
+    <!-- Lien Suivant -->
+    <a href="{{ url_for(endpoint, page=page+1, **extra_params) }}"
+       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl backdrop-blur-sm transition {% if page == total_pages %}opacity-40 pointer-events-none bg-white/30 text-gray-500{% else %}bg-white/60 hover:bg-white/80 text-indigo-600 hover:text-indigo-700 border border-white/50{% endif %}">
+        Suivant <i class="fas fa-chevron-right text-xs"></i>
+    </a>
+</div>
+{% endif %}
+{% endmacro %}

@@ -1,0 +1,65 @@
+[
+  {
+    "id": 2,
+    "matricule": "ETU-0002",
+    "name": "Dieynaba BA",
+    "email": "diey@etu.univ.sn",
+    "sexe": "F",
+    "date_naissance": "2000-01-02",
+    "class_id": 1
+  },
+  {
+    "id": 3,
+    "matricule": "ETU-0003",
+    "name": "Mame Khary Gueye",
+    "email": "khary@etu.univ.sn",
+    "sexe": "F",
+    "date_naissance": "2000-01-01",
+    "class_id": 1
+  },
+  {
+    "id": 4,
+    "matricule": "ETU-0004",
+    "name": "Rosaline Ndour",
+    "email": "rosa@etu.univ.sn",
+    "sexe": "F",
+    "date_naissance": "2000-01-01",
+    "class_id": 1
+  },
+  {
+    "id": 5,
+    "matricule": "ETU-0005",
+    "name": "Abdel Niang",
+    "email": "abdel@etu.univ.sn",
+    "sexe": "M",
+    "date_naissance": "2000-01-01",
+    "class_id": 3
+  },
+  {
+    "id": 6,
+    "matricule": "ETU-0006",
+    "name": "ndeye oumy NDOYE",
+    "email": "ndeye.ndoye@etu.univ.sn",
+    "sexe": "M",
+    "date_naissance": "2026-03-26",
+    "class_id": 3
+  },
+  {
+    "id": 7,
+    "matricule": "ETU-0006",
+    "name": "ndeye oumy NDOYE",
+    "email": "ndeye.ndoye1@etu.univ.sn",
+    "sexe": "F",
+    "date_naissance": "2026-03-24",
+    "class_id": 2
+  },
+  {
+    "id": 8,
+    "matricule": "ETU-0007",
+    "name": "Rokhaya Gueye",
+    "email": "rokhaya.gueye@etu.univ.sn",
+    "sexe": "F",
+    "date_naissance": "2005-02-04",
+    "class_id": 2
+  }
+]

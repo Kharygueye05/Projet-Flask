@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Recherche enseignants{% endblock %}
+{% block content %}
+<style>
+    /* Styles modernes identiques aux autres pages */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    .table-container {
+        overflow-x: auto;
+        border-radius: 1.5rem;
+    }
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .modern-table th {
+        background: #f9fafb;
+        padding: 1rem 1.2rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #4b5563;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .modern-table td {
+        padding: 1rem 1.2rem;
+        border-bottom: 1px solid #f0f2f5;
+        color: #1f2937;
+        transition: background 0.2s;
+    }
+    .modern-table tr:hover td {
+        background: #fef9ff;
+    }
+    .speciality-badge {
+        display: inline-block;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        margin: 0.1rem;
+    }
+    .action-icons a {
+        margin: 0 0.5rem;
+        font-size: 1.1rem;
+        transition: all 0.2s;
+        display: inline-block;
+    }
+    .action-icons a:hover {
+        transform: scale(1.1);
+    }
+    .btn-back {
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(4px);
+        transition: all 0.2s;
+    }
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto my-8">
+    <div class="glass-card">
+        <!-- En-tête -->
+        <div class="bg-gradient-to-r from-indigo-600/80 to-indigo-800/80 backdrop-blur-sm px-6 py-5">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-xl">
+                        <i class="fas fa-search text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Résultats pour "{{ query }}"</h2>
+                </div>
+                <a href="{{ url_for('teachers.list') }}" 
+                   class="btn-back inline-flex items-center gap-2 text-white px-4 py-2 rounded-xl transition">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+        </div>
+
+        <!-- Tableau des résultats -->
+        <div class="table-container">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Spécialités</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in results %}
+                    <tr>
+                        <td class="font-mono text-gray-500">#{{ t.id }}</td>
+                        <td class="font-medium">{{ t.name }}</td>
+                        <td class="text-gray-600">{{ t.email }}</td>
+                        <td>
+                            {% for spec in t.specialities %}
+                            <span class="speciality-badge">{{ spec }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="text-center action-icons">
+                            <a href="{{ url_for('teachers.detail', id=t.id) }}" 
+                               class="text-purple-500 hover:text-purple-700" title="Profil">
+                                <i class="fas fa-user-circle"></i>
+                            </a>
+                            <a href="{{ url_for('teachers.edit', id=t.id) }}" 
+                               class="text-indigo-500 hover:text-indigo-700" title="Modifier">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{ url_for('teachers.delete', id=t.id) }}" 
+                               class="text-red-500 hover:text-red-700" title="Supprimer"
+                               onclick="return confirm('Supprimer cet enseignant ?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-400">
+                            <i class="fas fa-chalkboard-user text-3xl mb-2 block"></i>
+                            Aucun enseignant trouvé pour "{{ query }}".
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pied de page -->
+        {% if results|length > 0 %}
+        <div class="px-6 py-3 border-t border-gray-100 text-sm text-gray-500 flex justify-between items-center">
+            <span>{{ results|length }} résultat(s) trouvé(s)</span>
+            <span class="text-indigo-500">Page 1 / 1</span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "email": "admin@example.com",
+    "password": "admin123",
+    "name": "Administrateur",
+    "role": "admin"
+  },
+  {
+    "id": 2,
+    "email": "princesselebou@etu.univ.sn",
+    "password": "ndeyeoumyndoye123",
+    "name": "Ndeye Oumy Ndoye",
+    "role": "student"
+  },
+  {
+    "id": 3,
+    "email": "diey@etu.univ.sn",
+    "password": "dieynababa123",
+    "name": "Dieynaba BA",
+    "role": "student"
+  },
+  {
+    "id": 4,
+    "email": "khary@etu.univ.sn",
+    "password": "mamekharygueye123",
+    "name": "Mame Khary Gueye",
+    "role": "student"
+  },
+  {
+    "id": 5,
+    "email": "mansour@gmail.com",
+    "password": "mansourdiallo123",
+    "name": "Mansour Diallo",
+    "role": "teacher"
+  },
+  {
+    "id": 6,
+    "email": "mass@gmail.com",
+    "password": "massambalo123",
+    "name": "Massamba Lo",
+    "role": "teacher"
+  },
+  {
+    "id": 7,
+    "email": "rosa@etu.univ.sn",
+    "password": "rosalinendour123",
+    "name": "Rosaline Ndour",
+    "role": "student"
+  },
+  {
+    "id": 8,
+    "email": "abdel@etu.univ.sn",
+    "password": "abdelniang123",
+    "name": "Abdel Niang",
+    "role": "student"
+  },
+  {
+    "id": 9,
+    "email": "aly@gmail.com",
+    "password": "alytallniagn123",
+    "name": "Aly Tall Niagn",
+    "role": "teacher"
+  },
+  {
+    "id": 10,
+    "email": "ndeye.ndoye@etu.univ.sn",
+    "password": "ndeyeoumyndoye123",
+    "name": "ndeye oumy NDOYE",
+    "role": "student"
+  },
+  {
+    "id": 11,
+    "email": "ndeye.ndoye1@etu.univ.sn",
+    "password": "ndeyeoumyndoye123",
+    "name": "ndeye oumy NDOYE",
+    "role": "student"
+  },
+  {
+    "id": 12,
+    "email": "rokhaya.gueye@etu.univ.sn",
+    "password": "rokhayagueye123",
+    "name": "Rokhaya Gueye",
+    "role": "student"
+  },
+  {
+    "id": 13,
+    "email": "djiberoutall02@gmail.com",
+    "password": "djiberoutall123",
+    "name": "Djiberou Tall",
+    "role": "teacher"
+  },
+  {
+    "id": 14,
+    "email": "karasamb03@gmail.com",
+    "password": "karasamb123",
+    "name": "Kara Samb",
+    "role": "teacher"
+  },
+  {
+    "id": 15,
+    "email": "bailawane04@gmail.com",
+    "password": "bailawane123",
+    "name": "Baila Wane",
+    "role": "teacher"
+  },
+  {
+    "id": 16,
+    "email": "magibdiagne07@gmaill.com",
+    "password": "magibdiagne123",
+    "name": "Magib Diagne",
+    "role": "teacher"
+  },
+  {
+    "id": 17,
+    "email": "eliasbadji08@gmail.com",
+    "password": "eliasbadji123",
+    "name": "Elias Badji",
+    "role": "teacher"
+  },
+  {
+    "id": 18,
+    "email": "landryyelome09@gmail.com",
+    "password": "tomaonlandryyelome123",
+    "name": "Tomaon Landry Yelome",
+    "role": "teacher"
+  },
+  {
+    "id": 19,
+    "email": "aw10@gmail.com",
+    "password": "mraw123",
+    "name": "Mr Aw",
+    "role": "teacher"
+  },
+  {
+    "id": 20,
+    "email": "brice11@gmail.com",
+    "password": "mrbrice123",
+    "name": "Mr Brice",
+    "role": "teacher"
+  }
+]

@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "name": "Mansour Diallo",
+    "email": "mansour@gmail.com",
+    "specialities": [
+      "Anglais"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Massamba Lo",
+    "email": "mass@gmail.com",
+    "specialities": [
+      "Reseaux"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Aly Tall Niagn",
+    "email": "aly@gmail.com",
+    "specialities": [
+      "Developpemement"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Djiberou Tall",
+    "email": "djiberoutall02@gmail.com",
+    "specialities": [
+      "Anglais"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Kara Samb",
+    "email": "karasamb03@gmail.com",
+    "specialities": [
+      "Systèmes"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Baila Wane",
+    "email": "bailawane04@gmail.com",
+    "specialities": [
+      "Programmation"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Magib Diagne",
+    "email": "magibdiagne07@gmaill.com",
+    "specialities": [
+      "Droit"
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Elias Badji",
+    "email": "eliasbadji08@gmail.com",
+    "specialities": [
+      "Management"
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Tomaon Landry Yelome",
+    "email": "landryyelome09@gmail.com",
+    "specialities": [
+      "Systèmes"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Mr Aw",
+    "email": "aw10@gmail.com",
+    "specialities": [
+      "Sécurité"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Mr Brice",
+    "email": "brice11@gmail.com",
+    "specialities": [
+      "Leadership"
+    ]
+  }
+]
